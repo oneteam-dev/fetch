@@ -342,8 +342,11 @@
 
       xhr.onload = function() {
         var status = (xhr.status === 1223) ? 204 : xhr.status
+        var body = 'response' in xhr ? xhr.response : xhr.responseText;
         if (status < 100 || status > 599) {
-          reject(new TypeError('Network request failed'))
+          var err = new TypeError('Network request failed');
+          err.body = body;
+          reject(err);
           return
         }
         var options = {
@@ -352,12 +355,14 @@
           headers: headers(xhr),
           url: responseURL()
         }
-        var body = 'response' in xhr ? xhr.response : xhr.responseText;
         resolve(new Response(body, options))
       }
 
       xhr.onerror = function() {
-        reject(new TypeError('Network request failed'))
+        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+        var err = new TypeError('Network request failed');
+        err.body = body;
+        reject(err)
       }
 
       xhr.open(request.method, request.url, true)
