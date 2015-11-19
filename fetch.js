@@ -362,6 +362,8 @@
         var body = 'response' in xhr ? xhr.response : xhr.responseText;
         var err = new TypeError('Network request failed');
         err.body = body;
+        err.status = xhr.status;
+        err.statusText = xhr.statusText;
         reject(err)
       }
 
