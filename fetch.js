@@ -346,6 +346,9 @@
         if (status < 100 || status > 599) {
           var err = new TypeError('Network request failed');
           err.body = body;
+          err.status = status;
+          err.statusText = xhr.statusText;
+          err.readyState = xhr.readyState;
           reject(err);
           return
         }
@@ -364,6 +367,7 @@
         err.body = body;
         err.status = xhr.status;
         err.statusText = xhr.statusText;
+        err.readyState = xhr.readyState;
         reject(err)
       }
 
